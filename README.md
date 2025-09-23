@@ -47,7 +47,7 @@
 + *Tấn công dựa trên bản rõ đã biết*: Khi kẻ tấn công có được một phần văn bản gốc (plaintext) và bản mật (ciphertext) tương ứng, họ có thể tính toán trực tiếp khóa và giải mã phần còn lại.
 + *Tấn công chọn trước bản rõ*: Trong một số tình huống, kẻ tấn công có thể yêu cầu mã hóa một văn bản cụ thể để phân tích và suy luận khóa. Đây là một dạng tấn công có chủ ý nhằm khai thác hệ thống mã hóa.</p>
 -- ***CÀI ĐẶT THUẬT TOÁN MÃ HOÁ VÀ GIẢI MÃ BẰNG CODE C++ VÀ BẰNG HTML+CSS++JAVACRIPT.***
-1. **Giải mã bằng code C++**</p>
++ **Giải mã bằng code C++**</p>
 ``` cpp
 #include <iostream>
 #include <string>
@@ -77,11 +77,23 @@ int main(){
 ```
 **Kết quả**
 <img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/6728d403-a22e-4db4-a207-ade50fc9dcde" /></P>
-2. **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
++ **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
 **Kết quả**
 <img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/bc93887e-d5b4-4971-897b-2d38eab97cd1" />
 
-
-
-
-
+2. ***AFFINE***</p>
+-- ***TÊN GỌI***: Affine Cipher, hay Mã hoá affine
+<img width="1200" height="712" alt="image" src="https://github.com/user-attachments/assets/b23fce9f-d0d8-44b0-ba1b-99e57560c743" /></p>
+-- ***THUẬT TOÁN MÃ HOÁ, THUẬT TOÁN GIẢI MÃ***</p>
+**Các hàm mã hoá và giải mã**
+- Với a^-1 là nghịch đảo của a theo modul n
+<img width="300" height="142" alt="image" src="https://github.com/user-attachments/assets/ab5e53b9-d761-4d64-9444-1b8f4206d94b" /></p>
+-- ***KHÔNG GIAN KHOÁ***
++ **a** phải thỏa gcd(a, 26) = 1. → Các giá trị hợp lệ của a là: {1,3,5,7,9,11,15,17,19,21,23,25}
++ **b** có thể chọn từ 0 đến 25 (26 giá trị).</p>
+-> Tổng số khóa: 12 x 26 = **312 giá trị**.</p>
+-- ***CÁCH PHÁ MÃ (MÀ KHÔNG CẦN KHOÁ)***
++ **Brute-force**: vì chỉ có 312 cặp khóa (a,b), nên thử hết là có thể tìm plaintext hợp lý.
++ Tần suất ký tự: vì đây là phép thay thế đơn bảng chữ cái, phân bố tần suất của ngôn ngữ vẫn bảo toàn nên có thể phân tích tần suất để đoán.</p>
+-- ***CÀI ĐẶT THUẬT TOÁN MÃ HOÁ VÀ GIẢI MÃ BẰNG CODE C++ VÀ BẰNG HTML+CSS++JAVACRIPT.***
++ **Giải mã bằng code C++**</p>
