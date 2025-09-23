@@ -97,3 +97,108 @@ int main(){
 + Tần suất ký tự: vì đây là phép thay thế đơn bảng chữ cái, phân bố tần suất của ngôn ngữ vẫn bảo toàn nên có thể phân tích tần suất để đoán.</p>
 -- ***CÀI ĐẶT THUẬT TOÁN MÃ HOÁ VÀ GIẢI MÃ BẰNG CODE C++ VÀ BẰNG HTML+CSS++JAVACRIPT.***
 + **Giải mã bằng code C++**</p>
+``` cpp
+#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+int mod26(int x) {
+    x %= 26;
+    if (x < 0) x += 26;
+    return x;
+}
+string affineEncrypt(const string &text, int a, int b) {
+    string result;
+    for (size_t i = 0; i < text.size(); ++i) {
+        unsigned char ch = text[i];
+        if (isalpha((unsigned char)ch)) {
+            char base = isupper(ch) ? 'A' : 'a';
+            int P = ch - base;
+            int C = mod26(a * P + b);
+            result.push_back(char(C + base));
+        } else {
+            result.push_back(ch);
+        }
+    }
+    return result;
+}
+int main() {
+    string text;
+    int a, b;
+    cout << "Nhap chuoi can ma hoa: ";
+    getline(cin, text);
+    cout << "Nhap khoa a b (cach nhau boi dau cach): ";
+    if (!(cin >> a >> b)) return 0;
+    cout << "Ban ma hoa: " << affineEncrypt(text, a, b) << endl;
+    return 0;
+}
+```
+**Kết quả**
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/62754f83-000f-4eb0-a170-d44eeb6dd092" />
++ **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
+**Kết quả**
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/a3dbb45f-665f-4d6b-afb1-d8ea3db4239b" />
+
+3. ***HOÁN VỊ***</p>
+-- ***TÊN GỌI***: Mã hoán vị (Transposition Cipher): Là phương pháp mã hóa giữ nguyên ký tự gốc, chỉ thay đổi vị trí sắp xếp theo một khóa (permutation key).</p>
+-- ***THUẬT TOÁN MÃ HOÁ, THUẬT TOÁN GIẢI MÃ***</p>
+***Mã hoá***
++ Đầu vào: bản rõ P, khóa K = (k1, k2, …, kn) là một hoán vị của 1..n.
++ Viết bản rõ thành bảng có n cột. Nếu chưa đủ thì thêm ký tự đệm (X).
++ Đọc theo thứ tự cột được quy định bởi khóa.
++ Ghép lại → bản mã C.</p>
+***Giải mã***
++ Đầu vào: bản mã C, khóa K.
++ Tính số hàng của bảng.
++ Chia bản mã thành các cột, sắp xếp lại đúng vị trí gốc theo khóa.
++ Đọc theo hàng ngang → bản rõ P.</p>
+-- ***KHÔNG GIAN KHOÁ***
++ Với số cột là **n**, không gian khóa có **n!** (giai thừa n) khả năng.
++ Ví dụ: n=3 → có **3!=6** khóa.</p>
+-- ***CÁCH PHÁ MÃ (MÀ KHÔNG CẦN KHOÁ)***
++ Brute-force: thử tất cả các hoán vị có thể (n! trường hợp).
++ Với bản rõ ngắn và n nhỏ → phá nhanh.
++ Với n lớn → số khóa cực kỳ lớn, khó brute-force.
++ Có thể dùng phân tích tần suất + thử nghiệm hoán vị để nhận diện từ có nghĩa.</p>
+-- ***CÀI ĐẶT THUẬT TOÁN MÃ HOÁ VÀ GIẢI MÃ BẰNG CODE C++ VÀ BẰNG HTML+CSS++JAVACRIPT.***
++ **Giải mã bằng code C++**</p>
+``` cpp
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+string transposeEncrypt(const string &text, const vector<int> &key) {
+    int cols = key.size();
+    int rows = (text.size() + cols - 1) / cols;
+    vector<vector<char> > matrix(rows, vector<char>(cols, 'X'));
+    int idx = 0;
+    for (int r = 0; r < rows; ++r) {
+        for (int c = 0; c < cols; ++c) {
+            if (idx < (int)text.size()) matrix[r][c] = text[idx++];
+        }
+    }
+    string result;
+    for (size_t k = 0; k < key.size(); ++k) {
+        int c = key[k] - 1;
+        for (int r = 0; r < rows; ++r) result.push_back(matrix[r][c]);
+    }
+    return result;
+}
+int main(){
+    string text;
+    cout << "Nhap chuoi can ma hoa: ";
+    getline(cin, text);
+    int n;
+    cout << "Nhap do dai khoa: ";
+    cin >> n;
+    vector<int> key(n);
+    cout << "Nhap khoa (vi du: 3 1 2): ";
+    for (int i = 0; i < n; ++i) cin >> key[i];
+    cout << "Ban ma hoa: " << transposeEncrypt(text, key) << endl;
+    return 0;
+}
+```
+**Kết quả**
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/f306a9c5-1a64-42e3-8cbf-1c023b8f7c22" />
++ **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/a9872ed1-e2e3-414e-a439-1d43060ab849" />
