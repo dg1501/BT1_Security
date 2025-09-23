@@ -47,3 +47,41 @@
 + *Tấn công dựa trên bản rõ đã biết*: Khi kẻ tấn công có được một phần văn bản gốc (plaintext) và bản mật (ciphertext) tương ứng, họ có thể tính toán trực tiếp khóa và giải mã phần còn lại.
 + *Tấn công chọn trước bản rõ*: Trong một số tình huống, kẻ tấn công có thể yêu cầu mã hóa một văn bản cụ thể để phân tích và suy luận khóa. Đây là một dạng tấn công có chủ ý nhằm khai thác hệ thống mã hóa.</p>
 -- ***CÀI ĐẶT THUẬT TOÁN MÃ HOÁ VÀ GIẢI MÃ BẰNG CODE C++ VÀ BẰNG HTML+CSS++JAVACRIPT.***
+1. **Giải mã bằng code C++**</p>
+``` cpp
+#include <iostream>
+#include <string>
+#include <cctype>
+using namespace std;
+string encrypt(const string &s, int k) {
+    string r;
+    for (size_t i = 0; i < s.size(); ++i) {
+        char c = s[i];
+        if (isalpha((unsigned char)c)) {
+            char b = isupper((unsigned char)c) ? 'A' : 'a';
+            r += char((c - b + k) % 26 + b);
+        } else r += c;
+    }
+    return r;
+}
+string decrypt(const string &s, int k) {
+    return encrypt(s, 26 - (k % 26));
+}
+int main(){
+    string t; int k;
+    getline(cin, t);
+    cin >> k;
+    string e = encrypt(t, k);
+    cout << e << '\n' << decrypt(e, k) << '\n';
+}
+```
+**Kết quả**
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/6728d403-a22e-4db4-a207-ade50fc9dcde" /></P>
+2. **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
+**Kết quả**
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/bc93887e-d5b4-4971-897b-2d38eab97cd1" />
+
+
+
+
+
