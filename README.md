@@ -264,22 +264,142 @@ int main() {
 <img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/dfcdc44c-5880-4a38-814c-d5ec8da215f7" />
 
 5. ***PLAYFAIR***</p>
+<img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/92ce512e-00ad-4b7f-832a-654fd93431ec" /></P>
 -- ***TÊN GỌI***: Mật mã Playfair (Playfair Cipher) là một dạng mã hóa thay thế theo cặp ký tự (digraph substitution cipher), được Charles Wheatstone phát minh (1854) và được Lord Playfair phổ biến.</p>
 -- ***THUẬT TOÁN MÃ HOÁ, THUẬT TOÁN GIẢI MÃ***</p>
 ***Mã hoá***</p>
 Chuẩn bị
 + Tạo ma trận 5x5 chứa 25 chữ cái tiếng Anh (I/J thường gộp chung).
 + Khóa là một từ/chuỗi ký tự → điền vào ma trận trước, bỏ chữ trùng lặp, sau đó điền các chữ cái còn lại.</p>
-Ví dụ
-<img width="442" height="288" alt="image" src="https://github.com/user-attachments/assets/15e68b7b-9bd2-454a-ac5d-9a8c8faecab5" />
+Ví dụ</p>
+<img width="442" height="288" alt="image" src="https://github.com/user-attachments/assets/15e68b7b-9bd2-454a-ac5d-9a8c8faecab5" /></p>
 ***Mã hoá***</p>
 + Chia bản rõ thành các cặp chữ (digraph). Nếu hai chữ cái giống nhau thì chèn "X" vào giữa. Nếu số lẻ → thêm "X" cuối.
 + Với mỗi cặp (a, b):
-1.Nếu cùng hàng → thay bằng ký tự bên phải (quay vòng).
-2.Nếu cùng cột → thay bằng ký tự bên dưới (quay vòng).
-3.Nếu khác hàng & cột → thay bằng ký tự cùng hàng nhưng cột của chữ kia (tạo hình chữ nhật).</p>
+1. Nếu cùng hàng → thay bằng ký tự bên phải (quay vòng).
+2. Nếu cùng cột → thay bằng ký tự bên dưới (quay vòng).
+3. Nếu khác hàng & cột → thay bằng ký tự cùng hàng nhưng cột của chữ kia (tạo hình chữ nhật).</p>
 ***Giải mã***</p>
-Ngược lại với mã hóa:
+Ngược lại với mã hóa:</p>
 + Cùng hàng → lấy chữ bên trái.
 + Cùng cột → lấy chữ bên trên.
-+ Hình chữ nhật → hoán đổi ngược.
++ Hình chữ nhật → hoán đổi ngược.</p>
+-- ***KHÔNG GIAN KHOÁ***
++ Khóa là chuỗi ký tự bất kỳ → số lượng khóa rất lớn.
++ Với 25 chữ cái, số ma trận có thể = 25! (cực kỳ lớn, không thể vét cạn).</p>
+-- ***CÁCH PHÁ MÃ (MÀ KHÔNG CẦN KHOÁ)***
++ Tần suất **digraphs**: vì mã hóa theo cặp chữ, phân tích thống kê cặp chữ cái có thể giúp suy ra ma trận.
++ **Known plaintext attack**: nếu biết một phần bản rõ, có thể suy ra cấu trúc ma trận.</p>
+-- ***CÀI ĐẶT THUẬT TOÁN MÃ HOÁ VÀ GIẢI MÃ BẰNG CODE C++ VÀ BẰNG HTML+CSS++JAVACRIPT.***
++ **Giải mã bằng code C++**</p>
+``` cpp
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cctype>
+using namespace std;
+string generateKeyMatrix(const string &key_input) {
+    string key = key_input;
+    // Thêm ph?n còn l?i c?a b?ng ch? d? d?m b?o d? ch?
+    key += "ABCDEFGHIKLMNOPQRSTUVWXYZ"; // J g?p v?i I
+    vector<bool> used(26, false);
+    string matrix = "";
+    for (size_t i = 0; i < key.size(); ++i) {
+        char ch = key[i];
+        if (!isalpha((unsigned char)ch)) continue;
+        ch = toupper((unsigned char)ch);
+        if (ch == 'J') ch = 'I';
+        int idx = ch - 'A';
+        if (!used[idx]) {
+            used[idx] = true;
+            matrix.push_back(ch);
+        }
+    }
+    // matrix nên có 25 ký t?
+    if (matrix.size() > 25) matrix = matrix.substr(0, 25);
+    return matrix;
+}
+pair<int,int> findPos(char c, const string &matrix) {
+    if (c == 'J') c = 'I';
+    int idx = (int)matrix.find(c);
+    return make_pair(idx / 5, idx % 5);
+}
+
+string prepareText(const string &text) {
+    string res = "";
+    for (size_t i = 0; i < text.size(); ++i) {
+        char ch = text[i];
+        if (isalpha((unsigned char)ch)) {
+            ch = toupper((unsigned char)ch);
+            if (ch == 'J') ch = 'I';
+            res.push_back(ch);
+        }
+    }
+    string prepared = "";
+    for (size_t i = 0; i < res.size(); ++i) {
+        prepared.push_back(res[i]);
+        if (i + 1 < res.size() && res[i] == res[i+1]) {
+            prepared.push_back('X');
+        }
+    }
+    if (prepared.size() % 2 != 0) prepared.push_back('X');
+    return prepared;
+}
+string playfairEncrypt(const string &text, const string &key_input) {
+    string matrix = generateKeyMatrix(key_input);
+    if (matrix.size() < 25) {
+        // fallback: fill missing letters (shouldn't happen)
+        for (char c = 'A'; c <= 'Z'; ++c) {
+            if (c == 'J') continue;
+            if (matrix.find(c) == string::npos) matrix.push_back(c);
+            if (matrix.size() == 25) break;
+        }
+    }
+
+    string prepared = prepareText(text);
+    string cipher = "";
+    for (size_t i = 0; i + 1 < prepared.size(); i += 2) {
+        char a = prepared[i];
+        char b = prepared[i+1];
+        pair<int,int> pa = findPos(a, matrix);
+        pair<int,int> pb = findPos(b, matrix);
+        int ra = pa.first, ca = pa.second;
+        int rb = pb.first, cb = pb.second;
+        if (ra == rb) {
+            // same row -> shift right
+            char na = matrix[ra*5 + (ca + 1) % 5];
+            char nb = matrix[rb*5 + (cb + 1) % 5];
+            cipher.push_back(na); cipher.push_back(nb);
+        } else if (ca == cb) {
+            // same column -> shift down
+            char na = matrix[((ra + 1) % 5) * 5 + ca];
+            char nb = matrix[((rb + 1) % 5) * 5 + cb];
+            cipher.push_back(na); cipher.push_back(nb);
+        } else {
+            // rectangle swap columns
+            char na = matrix[ra*5 + cb];
+            char nb = matrix[rb*5 + ca];
+            cipher.push_back(na); cipher.push_back(nb);
+        }
+    }
+    return cipher;
+}
+int main() {
+    string text, key;
+    cout << "Nhap van ban: ";
+    getline(cin, text);
+    cout << "Nhap khoa: ";
+    getline(cin, key);
+    string encrypted = playfairEncrypt(text, key);
+    cout << "Ban ma: " << encrypted << endl;
+    return 0;
+}
+```
+**Kết quả**
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/39e8ab29-0813-4467-83ca-922ba073d0ed" /></p>
++ **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
+**Kết quả**
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/b18eb202-32a8-44d4-8bc5-844f3fc12174" />
+
+--------------------------------------------------------------------- HẾT ---------------------------------------------------------------------------------
