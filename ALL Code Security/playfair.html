@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mã hóa Playfair</title>
+    <style>
+      body {
+        font-family: Arial;
+        margin: 30px;
+      }
+      input,
+      button {
+        margin: 5px;
+        padding: 5px;
+      }
+      #result {
+        margin-top: 10px;
+        font-weight: bold;
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Mã hóa Playfair</h2>
+    <label>Văn bản:</label><br />
+    <input type="text" id="text" size="40" /><br />
+    <label>Khóa:</label><br />
+    <input type="text" id="key" /><br />
+    <button onclick="encrypt()">Mã hóa</button>
+    <div id="result"></div>
+
+    <script>
+      function generateMatrix(key) {
+        key =
+          key.toUpperCase().replace(/J/g, "I") + "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+        let seen = {};
+        let matrix = "";
+        for (let c of key) {
+          if (!seen[c] && /[A-Z]/.test(c)) {
+            seen[c] = true;
+            matrix += c;
+          }
+        }
+        return matrix;
+      }
+
+      function findPos(c, matrix) {
+        if (c === "J") c = "I";
+        let idx = matrix.indexOf(c);
+        return [Math.floor(idx / 5), idx % 5];
+      }
+
+      function prepareText(text) {
+        let res = text
+          .toUpperCase()
+          .replace(/[^A-Z]/g, "")
+          .replace(/J/g, "I");
+        let prepared = "";
+        for (let i = 0; i < res.length; i++) {
+          prepared += res[i];
+          if (i + 1 < res.length && res[i] === res[i + 1]) prepared += "X";
+        }
+        if (prepared.length % 2 !== 0) prepared += "X";
+        return prepared;
+      }
+
+      function encrypt() {
+        let text = document.getElementById("text").value;
+        let key = document.getElementById("key").value;
+        let matrix = generateMatrix(key);
+        let prepared = prepareText(text);
+        let cipher = "";
+
+        for (let i = 0; i < prepared.length; i += 2) {
+          let a = prepared[i],
+            b = prepared[i + 1];
+          let pa = findPos(a, matrix),
+            pb = findPos(b, matrix);
+
+          if (pa[0] === pb[0]) {
+            cipher += matrix[pa[0] * 5 + ((pa[1] + 1) % 5)];
+            cipher += matrix[pb[0] * 5 + ((pb[1] + 1) % 5)];
+          } else if (pa[1] === pb[1]) {
+            cipher += matrix[((pa[0] + 1) % 5) * 5 + pa[1]];
+            cipher += matrix[((pb[0] + 1) % 5) * 5 + pb[1]];
+          } else {
+            cipher += matrix[pa[0] * 5 + pb[1]];
+            cipher += matrix[pb[0] * 5 + pa[1]];
+          }
+        }
+        document.getElementById("result").innerText = "Bản mã: " + cipher;
+      }
+    </script>
+  </body>
+</html>

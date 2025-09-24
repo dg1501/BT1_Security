@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Permutation Cipher</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      input,
+      button {
+        margin: 5px;
+        padding: 5px;
+      }
+      #result {
+        margin-top: 10px;
+        font-weight: bold;
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Mã hoán vị - Transposition Cipher</h2>
+    <label>Chuỗi gốc: </label>
+    <input type="text" id="text" size="40" /><br />
+
+    <label>Khóa (ví dụ: 3,1,2): </label>
+    <input type="text" id="key" size="20" /><br />
+
+    <button onclick="encrypt()">Mã hóa</button>
+
+    <div id="result"></div>
+
+    <script>
+      function encrypt() {
+        let text = document.getElementById("text").value;
+        let keyStr = document.getElementById("key").value.trim();
+        let key = keyStr.split(",").map((x) => parseInt(x));
+        let cols = key.length;
+        let rows = Math.ceil(text.length / cols);
+
+        let matrix = [];
+        let idx = 0;
+        for (let r = 0; r < rows; r++) {
+          let row = [];
+          for (let c = 0; c < cols; c++) {
+            if (idx < text.length) row.push(text[idx++]);
+            else row.push("X");
+          }
+          matrix.push(row);
+        }
+
+        let result = "";
+        for (let k = 0; k < cols; k++) {
+          let c = key[k] - 1;
+          for (let r = 0; r < rows; r++) {
+            result += matrix[r][c];
+          }
+        }
+
+        document.getElementById("result").innerText = "Bản mã: " + result;
+      }
+    </script>
+  </body>
+</html>

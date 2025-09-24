@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Affine Cipher Encrypt</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      input,
+      button {
+        margin: 5px 0;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Affine Cipher - Mã hóa</h2>
+    <label>Chuỗi cần mã hóa:</label><br />
+    <input type="text" id="text" placeholder="Nhập văn bản" /><br />
+    <label>Khóa a:</label><br />
+    <input type="number" id="a" value="5" /><br />
+    <label>Khóa b:</label><br />
+    <input type="number" id="b" value="8" /><br />
+    <button onclick="encrypt()">Mã hóa</button>
+    <p><b>Kết quả mã hóa:</b> <span id="result"></span></p>
+
+    <script>
+      function affineEncrypt(text, a, b) {
+        let result = "";
+        for (let i = 0; i < text.length; i++) {
+          let c = text[i];
+          if (/[a-zA-Z]/.test(c)) {
+            let base = c === c.toUpperCase() ? 65 : 97;
+            let code = c.charCodeAt(0) - base;
+            result += String.fromCharCode(((a * code + b) % 26) + base);
+          } else {
+            result += c;
+          }
+        }
+        return result;
+      }
+
+      function encrypt() {
+        let text = document.getElementById("text").value;
+        let a = parseInt(document.getElementById("a").value);
+        let b = parseInt(document.getElementById("b").value);
+        document.getElementById("result").innerText = affineEncrypt(text, a, b);
+      }
+    </script>
+  </body>
+</html>
