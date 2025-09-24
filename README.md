@@ -203,3 +203,83 @@ int main(){
 + **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
 **Kết quả**
 <img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/a9872ed1-e2e3-414e-a439-1d43060ab849" />
+
+4. ***VIGENÈRE***</p>
+-- ***TÊN GỌI***: Mật mã Vigenère (Vigenère Cipher) là một phương pháp mã hóa thay thế đa bảng (polyalphabetic substitution cipher). Nó dùng một từ khóa để quyết định dịch chuyển các chữ cái.</p>
+-- ***THUẬT TOÁN MÃ HOÁ, THUẬT TOÁN GIẢI MÃ***</p>
+***Mã hoá***</p>
+Cho:
++ **Bản rõ**: P = p1 p2 ... pn
++ **Khóa**: K = k1 k2 ... km (lặp lại để đủ độ dài)
++ **Bản mã**: C = c1 c2 ... cn</p>
+Công thức:
+` Ci​=(Pi​+Ki​)mod26 `</p>
+Trong đó:
++ **Pi** và **Ci**: vị trí chữ cái (A=0, B=1, …, Z=25).
++ **Ki** là vị trí chữ cái trong khóa.</p>
+***Giải mã***</p>
+` Pi =(Ci − Ki + 26)mod26 `</p>
+-- ***KHÔNG GIAN KHOÁ***
++ Khóa là một chuỗi ký tự (chỉ cần độ dài ≥ 1).
++ Nếu bảng chữ cái có 26 ký tự, thì số lượng khóa = **26^m** (m = độ dài khóa).</p>
+-- ***CÁCH PHÁ MÃ (MÀ KHÔNG CẦN KHOÁ)***
++ Tần suất chữ cái: với khóa ngắn, có thể đoán dựa vào chu kỳ lặp.
++ Kasiski Examination: tìm khoảng cách lặp lại trong bản mã để suy ra độ dài khóa.
++ Friedman Test: dựa trên chỉ số trùng khớp để ước lượng độ dài khóa.</p>
+-- ***CÀI ĐẶT THUẬT TOÁN MÃ HOÁ VÀ GIẢI MÃ BẰNG CODE C++ VÀ BẰNG HTML+CSS++JAVACRIPT.***
++ **Giải mã bằng code C++**</p>
+``` cpp
+#include <iostream>
+#include <string>
+using namespace std;
+string vigenereEncrypt(string text, string key) {
+    string result = "";
+    int m = key.size();
+    for (int i = 0; i < text.size(); i++) {
+        char c = text[i];
+        if (isalpha(c)) {
+            char base = isupper(c) ? 'A' : 'a';
+            char k = tolower(key[i % m]) - 'a';
+            result += (c - base + k) % 26 + base;
+        } else {
+            result += c;
+        }
+    }
+    return result;
+}
+int main() {
+    string text, key;
+    cout << "Nhap van ban: ";
+    getline(cin, text);
+    cout << "Nhap khoa: ";
+    cin >> key;
+    cout << "Ban ma: " << vigenereEncrypt(text, key) << endl;
+    return 0;
+}
+```
+**Kết quả**
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/a37dac74-e0ac-4703-a1d7-c2a2b46ce853" />
++ **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
+**Kết quả**
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/dfcdc44c-5880-4a38-814c-d5ec8da215f7" />
+
+5. ***PLAYFAIR***</p>
+-- ***TÊN GỌI***: Mật mã Playfair (Playfair Cipher) là một dạng mã hóa thay thế theo cặp ký tự (digraph substitution cipher), được Charles Wheatstone phát minh (1854) và được Lord Playfair phổ biến.</p>
+-- ***THUẬT TOÁN MÃ HOÁ, THUẬT TOÁN GIẢI MÃ***</p>
+***Mã hoá***</p>
+Chuẩn bị
++ Tạo ma trận 5x5 chứa 25 chữ cái tiếng Anh (I/J thường gộp chung).
++ Khóa là một từ/chuỗi ký tự → điền vào ma trận trước, bỏ chữ trùng lặp, sau đó điền các chữ cái còn lại.</p>
+Ví dụ
+<img width="442" height="288" alt="image" src="https://github.com/user-attachments/assets/15e68b7b-9bd2-454a-ac5d-9a8c8faecab5" />
+***Mã hoá***</p>
++ Chia bản rõ thành các cặp chữ (digraph). Nếu hai chữ cái giống nhau thì chèn "X" vào giữa. Nếu số lẻ → thêm "X" cuối.
++ Với mỗi cặp (a, b):
+1.Nếu cùng hàng → thay bằng ký tự bên phải (quay vòng).
+2.Nếu cùng cột → thay bằng ký tự bên dưới (quay vòng).
+3.Nếu khác hàng & cột → thay bằng ký tự cùng hàng nhưng cột của chữ kia (tạo hình chữ nhật).</p>
+***Giải mã***</p>
+Ngược lại với mã hóa:
++ Cùng hàng → lấy chữ bên trái.
++ Cùng cột → lấy chữ bên trên.
++ Hình chữ nhật → hoán đổi ngược.
