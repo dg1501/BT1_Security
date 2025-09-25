@@ -82,7 +82,7 @@ int main(){
 MÃ HOÁ
 <img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/bc93887e-d5b4-4971-897b-2d38eab97cd1" /></P>
 GIẢI MÃ
-<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/02684931-f3c4-4849-a999-1568c83497c9" /></P>
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/aedf29ba-cec7-4670-9489-8918542a1d81" /></p>
 
 2. ***AFFINE***</p>
 -- ***TÊN GỌI***: Affine Cipher, hay Mã hoá affine
@@ -139,8 +139,11 @@ int main() {
 **Kết quả**
 <img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/62754f83-000f-4eb0-a170-d44eeb6dd092" />
 + **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
-**Kết quả**
-<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/a3dbb45f-665f-4d6b-afb1-d8ea3db4239b" />
+**Kết quả**</P>
+MÃ HOÁ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/a3dbb45f-665f-4d6b-afb1-d8ea3db4239b" /></P>
+GIẢI MÃ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/41b51f1f-4c20-486b-9791-3fdb0c8299e0" /><P>
 
 3. ***HOÁN VỊ***</p>
 -- ***TÊN GỌI***: Mã hoán vị (Transposition Cipher): Là phương pháp mã hóa giữ nguyên ký tự gốc, chỉ thay đổi vị trí sắp xếp theo một khóa (permutation key).</p>
@@ -204,8 +207,11 @@ int main(){
 **Kết quả**
 <img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/f306a9c5-1a64-42e3-8cbf-1c023b8f7c22" />
 + **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
-**Kết quả**
-<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/a9872ed1-e2e3-414e-a439-1d43060ab849" />
+**Kết quả**</P>
+MÃ HOÁ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/a9872ed1-e2e3-414e-a439-1d43060ab849" /></P>
+GIẢI MÃ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/d2d3c753-8443-4832-b11b-f185633e10f0" /></P>
 
 4. ***VIGENÈRE***</p>
 -- ***TÊN GỌI***: Mật mã Vigenère (Vigenère Cipher) là một phương pháp mã hóa thay thế đa bảng (polyalphabetic substitution cipher). Nó dùng một từ khóa để quyết định dịch chuyển các chữ cái.</p>
@@ -263,8 +269,11 @@ int main() {
 **Kết quả**
 <img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/a37dac74-e0ac-4703-a1d7-c2a2b46ce853" />
 + **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
-**Kết quả**
-<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/dfcdc44c-5880-4a38-814c-d5ec8da215f7" />
+**Kết quả**</P>
+MÃ HOÁ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/b23e0d47-48db-466d-ba96-ca077dc78649" /></p>
+GIẢI MÃ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/3828a5fd-4620-41b7-8893-c40486a2b11e" /></p>
 
 5. ***PLAYFAIR***</p>
 <img width="1280" height="720" alt="image" src="https://github.com/user-attachments/assets/92ce512e-00ad-4b7f-832a-654fd93431ec" /></P>
@@ -402,7 +411,9 @@ int main() {
 **Kết quả**
 <img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/39e8ab29-0813-4467-83ca-922ba073d0ed" /></p>
 + **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
-**Kết quả**
-<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/b18eb202-32a8-44d4-8bc5-844f3fc12174" />
+**Kết quả**</p>
+MÃ HOÁ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/95c68e6d-662a-4288-b3bc-8d200b953053" /></P>
+GIẢI MÃ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/94a87236-60b9-4bb2-bdde-284dda197a93" /></p>
 
---------------------------------------------------------------------- HẾT ---------------------------------------------------------------------------------
