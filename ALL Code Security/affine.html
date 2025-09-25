@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Affine Cipher Encrypt/Decrypt</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      input,
+      button {
+        margin: 5px 0;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Affine Cipher</h2>
+
+    <label>Chuỗi:</label><br />
+    <input type="text" id="text" placeholder="Nhập văn bản" /><br />
+
+    <label>Khóa a:</label><br />
+    <input type="number" id="a" value="5" /><br />
+
+    <label>Khóa b:</label><br />
+    <input type="number" id="b" value="8" /><br />
+
+    <button onclick="encrypt()">Mã hóa</button>
+    <button onclick="decrypt()">Giải mã</button>
+
+    <p><b>Kết quả:</b> <span id="result"></span></p>
+
+    <script>
+      function gcd(a, b) {
+        return b === 0 ? a : gcd(b, a % b);
+      }
+
+      function modInverse(a, m) {
+        a = ((a % m) + m) % m;
+        for (let x = 1; x < m; x++) {
+          if ((a * x) % m === 1) return x;
+        }
+        return null; // Không tồn tại nghịch đảo modulo
+      }
+
+      function affineEncrypt(text, a, b) {
+        let result = "";
+        for (let i = 0; i < text.length; i++) {
+          let c = text[i];
+          if (/[a-zA-Z]/.test(c)) {
+            let base = c === c.toUpperCase() ? 65 : 97;
+            let code = c.charCodeAt(0) - base;
+            result += String.fromCharCode(((a * code + b) % 26) + base);
+          } else {
+            result += c;
+          }
+        }
+        return result;
+      }
+
+      function affineDecrypt(text, a, b) {
+        let result = "";
+        let a_inv = modInverse(a, 26);
+        if (a_inv === null) {
+          return "Không tồn tại nghịch đảo modulo 26, không thể giải mã!";
+        }
+
+        for (let i = 0; i < text.length; i++) {
+          let c = text[i];
+          if (/[a-zA-Z]/.test(c)) {
+            let base = c === c.toUpperCase() ? 65 : 97;
+            let code = c.charCodeAt(0) - base;
+            result += String.fromCharCode(
+              ((a_inv * (code - b + 26)) % 26) + base
+            );
+          } else {
+            result += c;
+          }
+        }
+        return result;
+      }
+
+      function encrypt() {
+        let text = document.getElementById("text").value;
+        let a = parseInt(document.getElementById("a").value);
+        let b = parseInt(document.getElementById("b").value);
+        if (gcd(a, 26) !== 1) {
+          document.getElementById("result").innerText =
+            "Khóa a không hợp lệ, phải coprime với 26!";
+          return;
+        }
+        document.getElementById("result").innerText = affineEncrypt(text, a, b);
+      }
+
+      function decrypt() {
+        let text = document.getElementById("text").value;
+        let a = parseInt(document.getElementById("a").value);
+        let b = parseInt(document.getElementById("b").value);
+        document.getElementById("result").innerText = affineDecrypt(text, a, b);
+      }
+    </script>
+  </body>
+</html>

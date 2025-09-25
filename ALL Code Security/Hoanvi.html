@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Permutation Cipher</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      input,
+      button {
+        margin: 5px;
+        padding: 5px;
+      }
+      #result {
+        margin-top: 10px;
+        font-weight: bold;
+        color: blue;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Mã hoán vị - Transposition Cipher</h2>
+
+    <label>Chuỗi: </label>
+    <input type="text" id="text" size="40" /><br />
+
+    <label>Khóa (ví dụ: 3,1,2): </label>
+    <input type="text" id="key" size="20" /><br />
+
+    <button onclick="encrypt()">Mã hóa</button>
+    <button onclick="decrypt()">Giải mã</button>
+
+    <div id="result"></div>
+
+    <script>
+      function encrypt() {
+        let text = document.getElementById("text").value;
+        let key = document
+          .getElementById("key")
+          .value.trim()
+          .split(",")
+          .map((x) => parseInt(x));
+        let cols = key.length;
+        let rows = Math.ceil(text.length / cols);
+
+        // Tạo ma trận
+        let matrix = [];
+        let idx = 0;
+        for (let r = 0; r < rows; r++) {
+          let row = [];
+          for (let c = 0; c < cols; c++) {
+            row.push(idx < text.length ? text[idx++] : "X"); // padding X nếu thiếu
+          }
+          matrix.push(row);
+        }
+
+        // Mã hóa: đọc theo thứ tự cột trong key
+        let result = "";
+        for (let k = 0; k < cols; k++) {
+          let c = key[k] - 1;
+          for (let r = 0; r < rows; r++) {
+            result += matrix[r][c];
+          }
+        }
+
+        document.getElementById("result").innerText = "Bản mã: " + result;
+      }
+
+      function decrypt() {
+        let text = document.getElementById("text").value;
+        let key = document
+          .getElementById("key")
+          .value.trim()
+          .split(",")
+          .map((x) => parseInt(x));
+        let cols = key.length;
+        let rows = Math.ceil(text.length / cols);
+
+        // Tạo ma trận trống
+        let matrix = Array.from({ length: rows }, () => Array(cols).fill(""));
+
+        // Điền ký tự từ bản mã theo thứ tự cột trong key
+        let idx = 0;
+        for (let k = 0; k < cols; k++) {
+          let c = key[k] - 1;
+          for (let r = 0; r < rows; r++) {
+            if (idx < text.length) {
+              matrix[r][c] = text[idx++];
+            }
+          }
+        }
+
+        // Đọc theo hàng để lấy bản rõ
+        let result = "";
+        for (let r = 0; r < rows; r++) {
+          for (let c = 0; c < cols; c++) {
+            result += matrix[r][c];
+          }
+        }
+
+        document.getElementById("result").innerText =
+          "Bản rõ: " + result.replace(/X+$/, ""); // loại bỏ padding X cuối
+      }
+    </script>
+  </body>
+</html>
