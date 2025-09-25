@@ -53,26 +53,35 @@
 #include <string>
 #include <cctype>
 using namespace std;
-string encrypt(const string &s, int k) {
-    string r;
-    for (size_t i = 0; i < s.size(); ++i) {
-        char c = s[i];
-        if (isalpha((unsigned char)c)) {
-            char b = isupper((unsigned char)c) ? 'A' : 'a';
-            r += char((c - b + k) % 26 + b);
+string caesar(const string &s, int k){
+    string r; k = ((k%26)+26)%26;
+    for(size_t i=0;i<s.size();++i){
+        unsigned char c = s[i];
+        if(isalpha(c)){
+            char base = isupper(c) ? 'A' : 'a';
+            r += char((c - base + k) % 26 + base);
         } else r += c;
     }
     return r;
 }
-string decrypt(const string &s, int k) {
-    return encrypt(s, 26 - (k % 26));
-}
 int main(){
-    string t; int k;
-    getline(cin, t);
-    cin >> k;
-    string e = encrypt(t, k);
-    cout << e << '\n' << decrypt(e, k) << '\n';
+    string text;
+    int k, choice;
+    cout<<"Nhap chuoi: ";
+    getline(cin, text);
+    cout<<"Nhap khoa (0-25): ";
+    cin>>k;
+    cout<<"\nChon: 1-Encrypt: , 2-Decrypt: ";
+    cin>>choice;
+
+    if(choice==1){
+        cout<< caesar(text, k) << endl;
+    } else if(choice==2){
+        cout<< caesar(text, 26 - (k%26)) << endl;
+    } else if(choice==3){
+        string enc = caesar(text, k);
+        cout << "Encrypted: " << enc << endl;
+}
 }
 ```
 **Kết quả**</p>
@@ -109,15 +118,25 @@ GIẢI MÃ
 #include <string>
 #include <cctype>
 using namespace std;
+// Hàm modulo 26
 int mod26(int x) {
     x %= 26;
     if (x < 0) x += 26;
     return x;
 }
+// Tìm ngh?ch d?o modulo 26
+int modInverse(int a) {
+    a = a % 26;
+    for (int x = 1; x < 26; x++) {
+        if ((a * x) % 26 == 1) return x;
+    }
+    return -1; // không t?n t?i
+}
+// Mã hóa Affine
 string affineEncrypt(const string &text, int a, int b) {
-    string result;
+    string result = "";
     for (size_t i = 0; i < text.size(); ++i) {
-        unsigned char ch = text[i];
+        char ch = text[i];
         if (isalpha((unsigned char)ch)) {
             char base = isupper(ch) ? 'A' : 'a';
             int P = ch - base;
@@ -129,19 +148,51 @@ string affineEncrypt(const string &text, int a, int b) {
     }
     return result;
 }
+string affineDecrypt(const string &text, int a, int b) {
+    string result = "";
+    int a_inv = modInverse(a);
+    if (a_inv == -1) {
+        return "Khong ton tai nghich dao modulo 26, khong the giai ma!";
+    }
+    for (size_t i = 0; i < text.size(); ++i) {
+        char ch = text[i];
+        if (isalpha((unsigned char)ch)) {
+            char base = isupper(ch) ? 'A' : 'a';
+            int C = ch - base;
+            int P = mod26(a_inv * (C - b));
+            result.push_back(char(P + base));
+        } else {
+            result.push_back(ch);
+        }
+    }
+    return result;
+}
 int main() {
     string text;
     int a, b;
-    cout << "Nhap chuoi can ma hoa: ";
+    int choice;
+    cout << "Nhap chuoi: ";
     getline(cin, text);
     cout << "Nhap khoa a b (cach nhau boi dau cach): ";
-    if (!(cin >> a >> b)) return 0;
-    cout << "Ban ma hoa: " << affineEncrypt(text, a, b) << endl;
+    cin >> a >> b;
+    cout << "Chon chuc nang (1: Ma hoa, 2: Giai ma): ";
+    cin >> choice;
+    if (choice == 1) {
+        cout << "Ban ma hoa: " << affineEncrypt(text, a, b) << endl;
+    } else if (choice == 2) {
+        cout << "Ban giai ma: " << affineDecrypt(text, a, b) << endl;
+    } else {
+        cout << "Lua chon khong hop le!" << endl;
+    }
     return 0;
 }
 ```
-**Kết quả**
-<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/62754f83-000f-4eb0-a170-d44eeb6dd092" />
+**Kết quả**</p>
+MÃ HOÁ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/62754f83-000f-4eb0-a170-d44eeb6dd092" /></P>
+GIẢI MÃ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/87218db7-b370-47e5-85d0-38f4caf2a31e" /></P>
+
 + **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
 **Kết quả**</P>
 MÃ HOÁ
@@ -177,10 +228,12 @@ GIẢI MÃ
 #include <string>
 #include <vector>
 using namespace std;
+// Mã hóa Transposition Cipher
 string transposeEncrypt(const string &text, const vector<int> &key) {
     int cols = key.size();
     int rows = (text.size() + cols - 1) / cols;
-    vector<vector<char> > matrix(rows, vector<char>(cols, 'X'));
+    vector<vector<char> > matrix(rows, vector<char>(cols, 'X')); // padding 'X'
+
     int idx = 0;
     for (int r = 0; r < rows; ++r) {
         for (int c = 0; c < cols; ++c) {
@@ -194,9 +247,31 @@ string transposeEncrypt(const string &text, const vector<int> &key) {
     }
     return result;
 }
-int main(){
+// Gi?i mã Transposition Cipher
+string transposeDecrypt(const string &cipher, const vector<int> &key) {
+    int cols = key.size();
+    int rows = (cipher.size() + cols - 1) / cols;
+    vector<vector<char> > matrix(rows, vector<char>(cols, 'X'));
+    int idx = 0;
+    for (size_t k = 0; k < key.size(); ++k) {
+        int c = key[k] - 1;
+        for (int r = 0; r < rows; ++r) {
+            if (idx < (int)cipher.size()) matrix[r][c] = cipher[idx++];
+        }
+    }
+    string result;
+    for (int r = 0; r < rows; ++r) {
+        for (int c = 0; c < cols; ++c) {
+            result.push_back(matrix[r][c]);
+        }
+    }
+    // Lo?i b? padding X cu?i n?u c?n
+    while (!result.empty() && result[result.size()-1] == 'X') result.erase(result.size()-1);
+    return result;
+}
+int main() {
     string text;
-    cout << "Nhap chuoi can ma hoa: ";
+    cout << "Nhap chuoi: ";
     getline(cin, text);
     int n;
     cout << "Nhap do dai khoa: ";
@@ -204,12 +279,25 @@ int main(){
     vector<int> key(n);
     cout << "Nhap khoa (vi du: 3 1 2): ";
     for (int i = 0; i < n; ++i) cin >> key[i];
-    cout << "Ban ma hoa: " << transposeEncrypt(text, key) << endl;
+    int choice;
+    cout << "Chon chuc nang (1: Ma hoa, 2: Giai ma): ";
+    cin >> choice;
+    if (choice == 1) {
+        cout << "Ban ma hoa: " << transposeEncrypt(text, key) << endl;
+    } else if (choice == 2) {
+        cout << "Ban giai ma: " << transposeDecrypt(text, key) << endl;
+    } else {
+        cout << "Lua chon khong hop le!" << endl;
+    }
     return 0;
 }
 ```
-**Kết quả**
-<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/f306a9c5-1a64-42e3-8cbf-1c023b8f7c22" />
+**Kết quả**</p>
+MÃ HOÁ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/f306a9c5-1a64-42e3-8cbf-1c023b8f7c22" /></p>
+GIẢI MÃ
+<img width="1102" height="639" alt="image" src="https://github.com/user-attachments/assets/aa1327db-1ce8-40bc-ac5e-8de7ce2ef01e" /></p>
+
 + **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
 **Kết quả**</P>
 MÃ HOÁ
@@ -245,15 +333,30 @@ Trong đó:
 #include <iostream>
 #include <string>
 using namespace std;
-string vigenereEncrypt(string text, string key) {
+string vigenereEncrypt(const string &text, const string &key) {
     string result = "";
     int m = key.size();
     for (int i = 0; i < text.size(); i++) {
         char c = text[i];
         if (isalpha(c)) {
             char base = isupper(c) ? 'A' : 'a';
-            char k = tolower(key[i % m]) - 'a';
-            result += (c - base + k) % 26 + base;
+            int k = tolower(key[i % m]) - 'a';
+            result += char((c - base + k) % 26 + base);
+        } else {
+            result += c;
+        }
+    }
+    return result;
+}
+string vigenereDecrypt(const string &text, const string &key) {
+    string result = "";
+    int m = key.size();
+    for (int i = 0; i < text.size(); i++) {
+        char c = text[i];
+        if (isalpha(c)) {
+            char base = isupper(c) ? 'A' : 'a';
+            int k = tolower(key[i % m]) - 'a';
+            result += char((c - base - k + 26) % 26 + base);
         } else {
             result += c;
         }
@@ -266,12 +369,25 @@ int main() {
     getline(cin, text);
     cout << "Nhap khoa: ";
     cin >> key;
-    cout << "Ban ma: " << vigenereEncrypt(text, key) << endl;
+    int choice;
+    cout << "Chon chuc nang (1: Ma hoa, 2: Giai ma): ";
+    cin >> choice;
+    if (choice == 1) {
+        cout << "Ban ma hoa: " << vigenereEncrypt(text, key) << endl;
+    } else if (choice == 2) {
+        cout << "Ban giai ma: " << vigenereDecrypt(text, key) << endl;
+    } else {
+        cout << "Lua chon khong hop le!" << endl;
+    }
     return 0;
 }
 ```
-**Kết quả**
-<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/a37dac74-e0ac-4703-a1d7-c2a2b46ce853" />
+**Kết quả**</p>
+MÃ HOÁ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/bd3c21e7-f7f3-458a-9529-86c77d44172b" /></P>
+GIẢI MÃ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/7891b5a7-c9f7-4173-a4be-6820c9ab5965" /></P>
+
 + **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
 **Kết quả**</P>
 MÃ HOÁ
@@ -316,9 +432,7 @@ Ngược lại với mã hóa:</p>
 #include <cctype>
 using namespace std;
 string generateKeyMatrix(const string &key_input) {
-    string key = key_input;
-    // Thêm ph?n còn l?i c?a b?ng ch? d? d?m b?o d? ch?
-    key += "ABCDEFGHIKLMNOPQRSTUVWXYZ"; // J g?p v?i I
+    string key = key_input + "ABCDEFGHIKLMNOPQRSTUVWXYZ"; // J = I
     vector<bool> used(26, false);
     string matrix = "";
     for (size_t i = 0; i < key.size(); ++i) {
@@ -332,7 +446,6 @@ string generateKeyMatrix(const string &key_input) {
             matrix.push_back(ch);
         }
     }
-    // matrix nên có 25 ký t?
     if (matrix.size() > 25) matrix = matrix.substr(0, 25);
     return matrix;
 }
@@ -355,24 +468,13 @@ string prepareText(const string &text) {
     string prepared = "";
     for (size_t i = 0; i < res.size(); ++i) {
         prepared.push_back(res[i]);
-        if (i + 1 < res.size() && res[i] == res[i+1]) {
-            prepared.push_back('X');
-        }
+        if (i + 1 < res.size() && res[i] == res[i+1]) prepared.push_back('X');
     }
     if (prepared.size() % 2 != 0) prepared.push_back('X');
     return prepared;
 }
 string playfairEncrypt(const string &text, const string &key_input) {
     string matrix = generateKeyMatrix(key_input);
-    if (matrix.size() < 25) {
-        // fallback: fill missing letters (shouldn't happen)
-        for (char c = 'A'; c <= 'Z'; ++c) {
-            if (c == 'J') continue;
-            if (matrix.find(c) == string::npos) matrix.push_back(c);
-            if (matrix.size() == 25) break;
-        }
-    }
-
     string prepared = prepareText(text);
     string cipher = "";
     for (size_t i = 0; i + 1 < prepared.size(); i += 2) {
@@ -384,22 +486,45 @@ string playfairEncrypt(const string &text, const string &key_input) {
         int rb = pb.first, cb = pb.second;
         if (ra == rb) {
             // same row -> shift right
-            char na = matrix[ra*5 + (ca + 1) % 5];
-            char nb = matrix[rb*5 + (cb + 1) % 5];
-            cipher.push_back(na); cipher.push_back(nb);
+            cipher.push_back(matrix[ra*5 + (ca + 1) % 5]);
+            cipher.push_back(matrix[rb*5 + (cb + 1) % 5]);
         } else if (ca == cb) {
             // same column -> shift down
-            char na = matrix[((ra + 1) % 5) * 5 + ca];
-            char nb = matrix[((rb + 1) % 5) * 5 + cb];
-            cipher.push_back(na); cipher.push_back(nb);
+            cipher.push_back(matrix[((ra + 1) % 5) * 5 + ca]);
+            cipher.push_back(matrix[((rb + 1) % 5) * 5 + cb]);
         } else {
             // rectangle swap columns
-            char na = matrix[ra*5 + cb];
-            char nb = matrix[rb*5 + ca];
-            cipher.push_back(na); cipher.push_back(nb);
+            cipher.push_back(matrix[ra*5 + cb]);
+            cipher.push_back(matrix[rb*5 + ca]);
         }
     }
     return cipher;
+}
+string playfairDecrypt(const string &cipher, const string &key_input) {
+    string matrix = generateKeyMatrix(key_input);
+    string plain = "";
+    for (size_t i = 0; i + 1 < cipher.size(); i += 2) {
+        char a = cipher[i];
+        char b = cipher[i+1];
+        pair<int,int> pa = findPos(a, matrix);
+        pair<int,int> pb = findPos(b, matrix);
+        int ra = pa.first, ca = pa.second;
+        int rb = pb.first, cb = pb.second;
+        if (ra == rb) {
+            // same row -> shift left
+            plain.push_back(matrix[ra*5 + (ca + 4) % 5]);
+            plain.push_back(matrix[rb*5 + (cb + 4) % 5]);
+        } else if (ca == cb) {
+            // same column -> shift up
+            plain.push_back(matrix[((ra + 4) % 5) * 5 + ca]);
+            plain.push_back(matrix[((rb + 4) % 5) * 5 + cb]);
+        } else {
+            // rectangle swap columns
+            plain.push_back(matrix[ra*5 + cb]);
+            plain.push_back(matrix[rb*5 + ca]);
+        }
+    }
+    return plain;
 }
 int main() {
     string text, key;
@@ -407,13 +532,25 @@ int main() {
     getline(cin, text);
     cout << "Nhap khoa: ";
     getline(cin, key);
-    string encrypted = playfairEncrypt(text, key);
-    cout << "Ban ma: " << encrypted << endl;
+    int choice;
+    cout << "Chon chuc nang (1: Ma hoa, 2: Giai ma): ";
+    cin >> choice;
+    if (choice == 1) {
+        cout << "Ban ma hoa: " << playfairEncrypt(text, key) << endl;
+    } else if (choice == 2) {
+        cout << "Ban giai ma: " << playfairDecrypt(text, key) << endl;
+    } else {
+        cout << "Lua chon khong hop le!" << endl;
+    }
     return 0;
 }
 ```
-**Kết quả**
-<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/39e8ab29-0813-4467-83ca-922ba073d0ed" /></p>
+**Kết quả**</p>
+MÃ HOÁ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/20127f8e-afa5-428e-825f-1e732b36043a" /></P>
+GIẢI MÃ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/ef6cc24c-b6b7-489a-ae4c-7fb5ed636960" /></p>
+
 + **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
 **Kết quả**</p>
 MÃ HOÁ
