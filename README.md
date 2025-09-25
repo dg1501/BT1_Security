@@ -78,8 +78,11 @@ int main(){
 **Kết quả**
 <img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/6728d403-a22e-4db4-a207-ade50fc9dcde" /></P>
 + **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
-**Kết quả**
-<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/bc93887e-d5b4-4971-897b-2d38eab97cd1" />
+**Kết quả**</P>
+MÃ HOÁ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/bc93887e-d5b4-4971-897b-2d38eab97cd1" /></P>
+GIẢI MÃ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/02684931-f3c4-4849-a999-1568c83497c9" /></P>
 
 2. ***AFFINE***</p>
 -- ***TÊN GỌI***: Affine Cipher, hay Mã hoá affine
