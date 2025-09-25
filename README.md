@@ -75,8 +75,12 @@ int main(){
     cout << e << '\n' << decrypt(e, k) << '\n';
 }
 ```
-**Kết quả**
+**Kết quả**</p>
+MÃ HOÁ
 <img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/6728d403-a22e-4db4-a207-ade50fc9dcde" /></P>
+GIẢI MÃ
+<img width="995" height="576" alt="image" src="https://github.com/user-attachments/assets/84bce59c-9b54-4caf-b1a5-3507fd21a64c" /></P>
+
 + **Giải mã bằng HTML+CSS+JAVACRIPT**</p>
 **Kết quả**</P>
 MÃ HOÁ
